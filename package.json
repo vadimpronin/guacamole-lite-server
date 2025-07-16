@@ -1,0 +1,62 @@
+{
+  "name": "guacamole-lite-server",
+  "version": "1.0.0",
+  "description": "Production-ready server wrapper for guacamole-lite with enterprise features",
+  "main": "lib/index.js",
+  "bin": {
+    "guacamole-lite-server": "bin/guacamole-lite-server"
+  },
+  "scripts": {
+    "start": "node bin/guacamole-lite-server",
+    "test": "jest",
+    "lint": "eslint lib/ bin/ test/",
+    "dev": "nodemon bin/guacamole-lite-server"
+  },
+  "keywords": [
+    "guacamole",
+    "remote-desktop",
+    "websocket",
+    "rdp",
+    "vnc",
+    "ssh",
+    "recording",
+    "s3",
+    "webhook",
+    "docker"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "guacamole-lite": "^1.0.2",
+    "ini": "^4.1.1",
+    "aws-sdk": "^2.1500.0",
+    "axios": "^1.6.0",
+    "archiver": "^6.0.0",
+    "yargs": "^17.7.0",
+    "mkdirp": "^3.0.1",
+    "rimraf": "^5.0.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.57.0",
+    "nodemon": "^3.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/guacamole-lite-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/username/guacamole-lite-server/issues"
+  },
+  "homepage": "https://github.com/username/guacamole-lite-server#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "lib/",
+    "bin/",
+    "config/",
+    "README.md",
+    "LICENSE"
+  ]
+}

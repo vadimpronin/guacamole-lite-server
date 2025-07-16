@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+
+const yargs = require('yargs');
+const path = require('path');
+const GuacamoleLiteServer = require('../lib/index');
+
+const argv = yargs
+  .option('config', {
+    alias: 'c',
+    describe: 'Path to configuration file',
+    type: 'string',
+    default: path.join(__dirname, '..', 'config', 'default.ini')
+  })
+  .option('validate', {
+    describe: 'Validate configuration without starting server',
+    type: 'boolean',
+    default: false
+  })
+  .help()
+  .version()
+  .argv;
+
+async function main() {
+  try {
+    if (argv.validate) {
+      const ConfigLoader = require('../lib/config-loader');
+      const configLoader = new ConfigLoader(argv.config);
+      configLoader.load();
+      console.log('Configuration validation passed');
+      process.exit(0);
+    }
+    
+    const server = new GuacamoleLiteServer(argv.config);
+    
+    // Handle graceful shutdown
+    process.on('SIGTERM', async () => {
+      console.log('Received SIGTERM, shutting down gracefully...');
+      await server.stop();
+      process.exit(0);
+    });
+    
+    process.on('SIGINT', async () => {
+      console.log('Received SIGINT, shutting down gracefully...');
+      await server.stop();
+      process.exit(0);
+    });
+    
+    await server.start();
+    
+  } catch (error) {
+    console.error('Failed to start server:', error.message);
+    process.exit(1);
+  }
+}
+
+main();

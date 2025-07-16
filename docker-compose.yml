@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  guacd:
+    image: guacamole/guacd:1.5.5
+    restart: unless-stopped
+    networks:
+      - guacamole
+
+  guacamole-lite-server:
+    build: .
+    environment:
+      - GUACD_HOST=guacd
+      - SECRET_KEY=${SECRET_KEY}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
+      - S3_REGION=${S3_REGION:-us-east-1}
+      - S3_DEFAULT_BUCKET=${S3_DEFAULT_BUCKET}
+      - WEBHOOK_ENABLE=${WEBHOOK_ENABLE:-false}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+    volumes:
+      - ./config/custom.ini:/app/config/custom.ini:ro
+      - recordings:/data/recordings
+      - drives:/data/drives
+    ports:
+      - "8080:8080"
+    depends_on:
+      - guacd
+    networks:
+      - guacamole
+    command: ["node", "bin/guacamole-lite-server", "--config", "/app/config/custom.ini"]
+
+networks:
+  guacamole:
+    driver: bridge
+
+volumes:
+  recordings:
+  drives:
